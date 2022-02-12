@@ -34,24 +34,24 @@ struct sistema {
 };
 
 typedef struct sistema Editora;
-Editora *primeiro;
-int qtd_de_livros;	
+Editora *primeiroLivro;
+int qtdDeLivros = 0;	
 	
 void separador();
 
-void add_livro();
+void adicionarLivros();
 
-void mostrar_livros(Editora *livros);
+void mostrarLivros(Editora *livros);
 
-int quantidade_livros(Editora *livros);
+int quantidadeLivros(Editora *livros);
 
-void livros_ano(Editora *livros, int ano);
+void anoLivros(Editora *livros, int ano);
 
 void liberar(Editora *livros);
 	
 int main() {
-	int aux = 0, escolha, qtd_livros = 0, ano_pub;
-	char condicao = 's';
+	int auxiliar = 0, opcao, qtdLivros = 0, anoPublicacao;
+	char condicao;
 	
 	do{
 		separador();
@@ -61,9 +61,10 @@ int main() {
 		printf("[2] - Sair\n");
 		separador();
 		printf("Opcao: ");
-		scanf("%d", &escolha);
+		scanf("%d", &opcao);
 		
-		switch(escolha) {
+		switch(opcao) {
+			
 			case 1:
 				do{
 					separador();
@@ -74,51 +75,76 @@ int main() {
 					printf("[5] - Voltar\n");
 					separador();
 					printf("Opcao: ");
-					scanf("%d", &escolha);
+					scanf("%d", &opcao);
 					
-					switch(escolha) {
+					switch(opcao) {
+						
 						case 1:	
-							condicao = 's';
-							while(condicao != 'n'){
-								add_livro();
+						
+							do{
+								adicionarLivros();
 								printf("Deseja continuar? [s / n] : ");
 								scanf("%s", &condicao);
-							} 
+							} while(condicao != 'n');
+	
 							break;
 							
-						case 2:	
-							mostrar_livros(primeiro);
+						case 2:
+							
+							if(primeiroLivro == NULL) {
+								printf("\nLista de livros ainda esta vazio :/\n");
+							} else {
+								mostrarLivros(primeiroLivro);	
+							}
+							
 							break;
 						
 						case 3:
-							qtd_livros = quantidade_livros(primeiro);
-							printf("Estoque: %d\n", qtd_livros);
+							
+							qtdLivros = quantidadeLivros(primeiroLivro);
+							printf("Estoque: %d\n", qtdLivros);
+							
 							break;
 							
 						case 4:
+							
 							printf("Ano de publicacao: ");
-							scanf("%d", &ano_pub);
-							livros_ano(primeiro, ano_pub);
+							scanf("%d", &anoPublicacao);
+							anoLivros(primeiroLivro, anoPublicacao);	
+							
 							break;
 							
 						case 5:
-							aux = 2;
+							
+							auxiliar = 2;
+							
 							break;
 							
 						default:
-							printf("[ERROR] Opcao Invalida :x\n");
+							
+							printf("[ERROR] Opcao Invalida :(\n");
 					}
-				} while(aux != 2);
+					
+				} while(auxiliar != 2);
+				
 				break;
+				
 			case 2:
-				aux = 1;
+				
+				auxiliar = 1;
+				
 				break;
+				
 			default:
-				printf("[ERRO] Opcao Invalida :x\n");
+				
+				printf("[ERROR] Opcao Invalida :(\n");
 		}
-	} while(aux != 1);
+		
+	} while(auxiliar != 1);
 	
-	liberar(primeiro);
+	printf("\nObrigado por usar nosso sistema ;)\n");
+	
+	liberar(primeiroLivro);
 	
 	return 0;
 }
@@ -127,7 +153,7 @@ void separador() {
 	printf("---------------------------\n");
 }
 
-void add_livro() {
+void adicionarLivros() {
 	Editora *livros = malloc(sizeof(Editora));
 	
 	separador();
@@ -147,11 +173,12 @@ void add_livro() {
 	printf("Quantidade: ");
 	scanf("%d", &livros->quantidade);
 	
-	livros->prox = primeiro;
-	primeiro = livros;
+	livros->prox = primeiroLivro;
+	primeiroLivro = livros;
 }
 
-void mostrar_livros(Editora *livros) {
+void mostrarLivros(Editora *livros) {
+	
 	if(livros != NULL) {
 		printf("\n\n");
 		separador();
@@ -162,38 +189,43 @@ void mostrar_livros(Editora *livros) {
 		separador();
 		printf("\n\n");
 		
-		mostrar_livros(livros->prox);
-	}
-}
-
-int quantidade_livros(Editora *livros) {
-	if(livros != NULL) {
-		qtd_de_livros += livros->quantidade;
-		
-		quantidade_livros(livros->prox);
+		mostrarLivros(livros->prox);
 	}
 	
-	return qtd_de_livros;
 }
 
-void livros_ano(Editora *livros, int ano) {
+int quantidadeLivros(Editora *livros) {
+	
 	if(livros != NULL) {
+		qtdDeLivros += livros->quantidade;
+		
+		quantidadeLivros(livros->prox);
+	}
+	
+	return qtdDeLivros;
+}
+
+void anoLivros(Editora *livros, int ano) {
+	
+	if(livros != NULL) {
+		
 		if(livros->ano == ano) {
-			printf("\n\n");
+			printf("\n");
 			separador();
 			printf("Titulo: %s\n", livros->titulo);
 			printf("Autor: %s\n", livros->autor);
 			printf("Ano: %d\n", livros->ano);
 			printf("Quantidade: %d\n", livros->quantidade);
 			separador();
-			printf("\n\n");
-		}
+			printf("\n");
+		} 
 		
-		livros_ano(livros->prox, ano);
+		anoLivros(livros->prox, ano);
 	}
 }
 
 void liberar(Editora *livros) {
+	
 	if(livros != NULL) {
 		liberar(livros->prox);
 		free(livros);

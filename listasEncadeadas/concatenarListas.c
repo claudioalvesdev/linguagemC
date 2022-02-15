@@ -11,26 +11,22 @@ struct pontos{
 };
 
 typedef struct pontos Lista;
-Lista *primeiro_L1, *primeiro_L2;
+Lista *primeiroNumeroLista1, *primeiroNumeroLista2;
 
 void separador();
 
-Lista *add_L1();
+Lista *adicionarLista1();
 
-Lista *add_L2();
+Lista *adicionarLista2();
 
-void mostrar_L(Lista *L);
+void mostrarListas(Lista *lista);
 
-Lista *concatena(Lista *L1, Lista *L2);
-
-void liberar_L1(Lista *L1);
-
-void liberar_L2(Lista *L1);
+Lista *concatenar(Lista *lista1, Lista *lista2);
 
 int main() {
-	int auxiliar = 0, escolha;
-	char condicao = 's';
-	Lista *L1, *L2, *L3;
+	int auxiliar = 0, opcao;
+	char condicao;
+	Lista *lista1, *lista2, *listaConcatenada;
 	
 	do{
 		separador();
@@ -42,10 +38,11 @@ int main() {
 		printf("[4] - Sair\n");
 		separador();
 		printf("Sua opcao: ");
-		scanf("%d", &escolha);
+		scanf("%d", &opcao);
 			
-		switch(escolha) {
+		switch(opcao) {
 			case 1:
+				
 				do{
 					separador();
 					printf("\tLista A\n");
@@ -54,30 +51,36 @@ int main() {
 					printf("[3] - Voltar\n");
 					separador();
 					printf("Sua opcao: ");
-					scanf("%d", &escolha);
+					scanf("%d", &opcao);
 					
-					switch(escolha) {
+					switch(opcao) {
 						case 1:
-							condicao = 's';
-							while(condicao != 'n') {
-								L1 = add_L1();
+							
+							do{
+								lista1 = adicionarLista1();
 								printf("Deseja continuar? [s / n] : ");
 								scanf("%s", &condicao);
-							}
+							} while(condicao != 'n');
+							
 							break;
 							
 						case 2:
-							mostrar_L(primeiro_L1);
+							
+							mostrarListas(primeiroNumeroLista1);
 							printf("\n");
+							
 							break;
 							
 						case 3:
+							
 							auxiliar = 2;
+							
 							break;
 							
 						default:
 							printf("[ERROR] Opcao Invalida x(\n");
 					}
+					
 				} while(auxiliar != 2);
 				
 				break;
@@ -91,53 +94,63 @@ int main() {
 					printf("[3] - Voltar\n");
 					separador();
 					printf("Sua opcao: ");
-					scanf("%d", &escolha);
+					scanf("%d", &opcao);
 					
-					switch(escolha) {
+					switch(opcao) {
 						case 1:
-							condicao = 's';
-							while(condicao != 'n') {
-								L2 = add_L2();
+							
+							do {
+								lista2 = adicionarLista2();
 								printf("Deseja continuar? [s / n] : ");
 								scanf("%s", &condicao);
-							}
+							} while(condicao != 'n');
+							
 							break;
 							
 						case 2:
-							mostrar_L(primeiro_L2);
+							
+							mostrarListas(primeiroNumeroLista2);
 							printf("\n");
+							
 							break;
 							
 						case 3:
+							
 							auxiliar = 3;
+							
 							break;
 							
 						default:
 							printf("[ERROR] Opcao Invalida x(\n");
 					}
+					
 				} while(auxiliar != 3);
 				
 				break;
 				
 			case 3:
 				
-				if(primeiro_L2 == NULL) {
+				if(primeiroNumeroLista2 == NULL) {
 					printf("[ERROR] Lista B esta vazia !!!\n");
 				} else{
-					L3 = concatena(L1, L2);
-					mostrar_L(primeiro_L2);
+					listaConcatenada = concatenar(lista1, lista2);
+					mostrarListas(primeiroNumeroLista2);
 					printf("\n");	
 				}
+				
 				break;
 				
 			case 4:
+				
 				printf("Obrigado por usar nossos servicos ;)\n");
 				auxiliar = 1;
+				
 				break;
 				
 			default:
 				printf("[ERROR] Opcao Invalida x(\n");
 		}
+		
 	} while(auxiliar != 1);
 
 	return 0;
@@ -147,47 +160,49 @@ void separador() {
 	printf("-----------------------------\n");
 }
 
-Lista *add_L1() {
-	Lista *L1 = malloc(sizeof(Lista));
+Lista *adicionarLista1() {
+	Lista *lista1 = malloc(sizeof(Lista));
 	
 	printf("Digite o valor: ");
-	scanf("%d", &L1->valor);
+	scanf("%d", &lista1->valor);
 	
-	L1->prox = primeiro_L1;
-	primeiro_L1 = L1;
+	lista1->prox = primeiroNumeroLista1;
+	primeiroNumeroLista1 = lista1;
 	
-	return L1;
+	return lista1;
 }
 
-Lista *add_L2() {
-	Lista *L2 = malloc(sizeof(Lista));
+Lista *adicionarLista2() {
+	Lista *lista2 = malloc(sizeof(Lista));
 	
 	printf("Digite o valor: ");
-	scanf("%d", &L2->valor);
+	scanf("%d", &lista2->valor);
 	
-	L2->prox = primeiro_L2;
-	primeiro_L2 = L2;
+	lista2->prox = primeiroNumeroLista2;
+	primeiroNumeroLista2 = lista2;
 	
-	return L2;
+	return lista2;
 }
 
-void mostrar_L(Lista *L) {
-	if(L != NULL) {
-		printf("%2d ", L->valor);
-		mostrar_L(L->prox);
+void mostrarListas(Lista *lista) {
+	
+	if(lista != NULL) {
+		printf("%2d ", lista->valor);
+		mostrarListas(lista->prox);
 	}
+	
 }
 
-Lista *concatena(Lista *L1, Lista *L2) {
-	Lista *copia = L2;
+Lista *concatenar(Lista *lista2, Lista *lista1) {
+	Lista *listaConcatenada = lista2;
 	
-	while(copia->prox != NULL) {
-		copia = copia->prox;
+	while(listaConcatenada->prox != NULL) {
+		listaConcatenada = listaConcatenada->prox;
 	}
 	
-	copia->prox = L1;
+	listaConcatenada->prox = lista1;	
 	
-	return copia;
+	return listaConcatenada;
 }
 
 

@@ -11,117 +11,140 @@ struct numeros{
 };
 
 typedef struct numeros Lista;
-Lista *primeiro, *positivos;
+Lista *primeiroNumero, *numerosPositivos;
 
 void separador() {
 	printf("--------------------\n");
 }
 
-void add_numero() {
-	Lista *valores = malloc(sizeof(Lista));
-	
-	printf("Digite o valor: ");
-	scanf("%d", &valores->valor);
-	
-	valores->prox = NULL;
-	if(primeiro == NULL) {
-		primeiro = valores;
-	} else{
-		Lista *aux_v = primeiro;
-		
-		while(aux_v->prox != NULL) {
-			aux_v = aux_v->prox;
-		}
-		
-		aux_v->prox = valores;
-	}
-	
-}
+void adicionarNumeros();
 
-void mostrar_n(Lista *valores) {
-	if(valores != NULL) {
-		printf("%2d ", valores->valor);
-		mostrar_n(valores->prox);
-	}
-}
+void mostrarNumeros(Lista *valores);
 
-void add_positivos(int numeros) {
-	Lista *valores_p = malloc(sizeof(Lista));
-	
-	valores_p->valor = numeros;
+void adicionarSomenteNumerosPositivos(int numeros);
 
-	valores_p->prox = NULL;
-	if(positivos == NULL) {
-		positivos = valores_p;
-	} else{
-		Lista *aux_p = positivos;
-		
-		while(aux_p->prox != NULL) {
-			aux_p = aux_p->prox;
-		}
-		
-		aux_p->prox = valores_p;
-	}
-}
-
-Lista *verificar_positivos(Lista *valores) {
-	
-	if(valores != NULL) {
-		if(valores->valor >= 0) {
-			add_positivos(valores->valor);
-			verificar_positivos(valores->prox);
-		} else{
-			verificar_positivos(valores->prox);
-		}
-		
-	}
-	
-	return positivos;
-}
+Lista *verificarPositivos(Lista *valores);
 
 int main() {
-	int auxiliar = 0, escolha;
-	char condicao = 's';
-	Lista *nova_lista;
+	int auxiliar = 0, opcao;
+	char condicao;
+	Lista *listaDeNumerosPositivos;
 	
 	do{
 		separador();
 		printf("\tMENU\n");
 		separador();
 		printf("[1] - Inserir valores\n");
-		printf("[2] - Listar valores\n");
-		printf("[3] - Listar Naturais\n");;
+		printf("[2] - Mostrar Lista Completa\n");
+		printf("[3] - Mostrar Somente\nNumeros Negativos\n");;
 		printf("[4] - Sair\n");
 		separador();
 		printf("Sua opcao: ");
-		scanf("%d", &escolha);
+		scanf("%d", &opcao);
 		
-		switch(escolha) {
+		switch(opcao) {
 			case 1:
-				condicao = 's';
-				while(condicao != 'n') {
-					add_numero();
+				
+				do {
+					adicionarNumeros();
 					printf("Desejar continuar? [s / n]: ");
 					scanf("%s", &condicao);
-				}
+				} while(condicao != 'n');
+				
 				break;
+				
 			case 2:
-				mostrar_n(primeiro);
+				
+				mostrarNumeros(primeiroNumero);
 				printf("\n");
+				
 				break;
+				
 			case 3:
-				nova_lista = verificar_positivos(primeiro);
-				mostrar_n(positivos);
+				
+				listaDeNumerosPositivos = verificarPositivos(primeiroNumero);
+				mostrarNumeros(numerosPositivos);
 				printf("\n");
+				
 				break;
+				
 			case 4:
+				
 				printf("Obrigado por usar nossos servicos ;)\n");
 				auxiliar = 1;
+				
 				break;
+				
 			default:
 				printf("[ERROR] Opcao invalida x(\n");
 		}
+		
 	} while(auxiliar != 1);
 	
 	return 0;
+}
+
+void adicionarNumeros() {
+	Lista *valores = malloc(sizeof(Lista));
+	
+	printf("Digite o valor: ");
+	scanf("%d", &valores->valor);
+	valores->prox = NULL;
+	
+	if(primeiroNumero == NULL) {
+		primeiroNumero = valores;
+	} else{
+		Lista *auxiliarLista = primeiroNumero;
+		
+		while(auxiliarLista->prox != NULL) {
+			auxiliarLista = auxiliarLista->prox;
+		}
+		
+		auxiliarLista->prox = valores;
+	}
+	
+}
+
+void mostrarNumeros(Lista *valores) {
+	
+	if(valores != NULL) {
+		printf("%2d ", valores->valor);
+		mostrarNumeros(valores->prox);
+	}
+	
+}
+
+void adicionarSomenteNumerosPositivos(int numeros) {
+	Lista *valoresPositivos = malloc(sizeof(Lista));
+	
+	valoresPositivos->valor = numeros;
+	valoresPositivos->prox = NULL;
+	
+	if(valoresPositivos == NULL) {
+		numerosPositivos = valoresPositivos;
+	} else{
+		Lista *auxiliarPositivos = numerosPositivos;
+		
+		while(auxiliarPositivos->prox != NULL) {
+			auxiliarPositivos = auxiliarPositivos->prox;
+		}
+		
+		auxiliarPositivos->prox = valoresPositivos;
+	}
+}
+
+Lista *verificarPositivos(Lista *valores) {
+	
+	if(valores != NULL) {
+		
+		if(valores->valor >= 0) {
+			adicionarSomenteNumerosPositivos(valores->valor);
+			verificarPositivos(valores->prox);
+		} else{
+			verificarPositivos(valores->prox);
+		}
+		
+	}
+	
+	return numerosPositivos;
 }

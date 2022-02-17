@@ -23,28 +23,28 @@ struct dados {
 };
 
 typedef struct dados Facebook;
-Facebook *primeiro;
-int tamanho = 0;
+Facebook *primeiroUsuario;
+int qtdUsuarios = 0;
 
 void separador();
 
-void add_usuarios();
+void adicionarUsuarios();
 
-void mostrar_usuarios(Facebook *usuarios);
+void mostrarUsuarios(Facebook *usuarios);
 
-void procurar_usuarios_nome(Facebook *usuarios, char nome[]);
+void procurarUsuariosPorNome(Facebook *usuarios, char nome[]);
 
-void procurar_usuarios_id(Facebook *usuarios, int id);
+void procurarUsuariosPorId(Facebook *usuarios, int id);
 
-void relacao(int amigo1, int amigo2, Facebook *usuarios);
+void tipoDeRelacao(int amigo1, int amigo2, Facebook *usuarios);
 
-void relacao_amizade(Facebook *usuarios);
+void relacaoDeAmizade(Facebook *usuarios);
 
 void liberar(Facebook *usuarios);
 
 int main() {
-	int auxiliar = 0, escolha, procurar_id, id_seu, id_desejado;
-	char condicao = 's', procurar_nome[80];
+	int auxiliar = 0, opcao, procurarPorId, meuId, idDesejado;
+	char condicao, procurarPorNome[80];
 	
 	do{
 		separador();
@@ -57,23 +57,28 @@ int main() {
 		printf("[5] - Sair\n");
 		separador();
 		printf("Sua opcao: ");
-		scanf("%d", &escolha);
+		scanf("%d", &opcao);
 		
-		switch(escolha) {
+		switch(opcao) {
+			
 			case 1:
-				condicao ='s';
 				
-				while(condicao != 'n') {
-					add_usuarios();
+				do{
+					adicionarUsuarios();	
 					printf("Deseja continuar? [s / n]: ");
 					scanf("%s", &condicao);
-				}
+				} while(condicao != 'n');
+				
 				break;
+				
 			case 2:
 				
-				mostrar_usuarios(primeiro);
+				mostrarUsuarios(primeiroUsuario);
+				
 				break;
+				
 			case 3:
+				
 				do{
 					separador();
 					printf("[1] - Por nome\n");
@@ -81,34 +86,41 @@ int main() {
 					printf("[3] - Voltar\n");
 					separador();
 					printf("Sua opcao: ");
-					scanf("%d", &escolha);
+					scanf("%d", &opcao);
 					
-					switch(escolha) {
+					switch(opcao) {
 						case 1:
 							
 							fflush(stdin);
 							printf("Nome: ");
-							gets(procurar_nome);
-							procurar_usuarios_nome(primeiro, procurar_nome);
+							gets(procurarPorNome);
+							procurarUsuariosPorNome(primeiroUsuario, procurarPorNome);
+							
 							break;
+							
 						case 2:
 							
 							fflush(stdin);
 							printf("Id: ");
-							scanf("%d", &procurar_id);
-							procurar_usuarios_id(primeiro, procurar_id);
+							scanf("%d", &procurarPorId);
+							procurarUsuariosPorId(primeiroUsuario, idDesejado);
+							
 							break;
+							
 						case 3:
 							
 							auxiliar = 2;
-							break;
-						default:
 							
+							break;
+							
+						default:
 							printf("[ERROR] Opcao invalida :x\n");
 					}
+					
 				} while(auxiliar != 2);
 				
 				break;
+				
 			case 4:
 				
 				do{
@@ -118,52 +130,66 @@ int main() {
 					printf("[3] - Voltar\n");
 					separador();
 					printf("Sua opcao: ");
-					scanf("%d", &escolha);
+					scanf("%d", &opcao);
 					
-					switch(escolha) {
+					switch(opcao) {
+						
 						case 1:
+							
 							separador();
 							printf("OLA SOU SEU ASSISTENTE VIRTUAL, ZERO.\n");
 							printf("PARA COMECAR\n");
 							separador();
 							printf("Digite seu id: ");
-							scanf("%d", &id_seu);
+							scanf("%d", &meuId);
 							separador();
 							printf("Digite o id da pessoa que\ndeseja ser amigo: ");
-							scanf("%d", &id_desejado);
+							scanf("%d", &idDesejado);
 							
-							if(primeiro == NULL) {
+							if(primeiroUsuario == NULL) {
 								printf("[ERROR] Nao existe usuarios cadastrados\n");
 							} else{
 								separador();
-								relacao(id_seu, id_desejado, primeiro);	
+								tipoDeRelacao(meuId, idDesejado, primeiroUsuario);	
 								separador();
 							}
+							
 							break;
+							
 						case 2:
 							
-							relacao_amizade(primeiro);
+							relacaoDeAmizade(primeiroUsuario);
+							
 							break;
+							
 						case 3:
 							
 							auxiliar = 3;
-							break;
-						default:
 							
+							break;
+							
+						default:
 							printf("[ERROR] Opcao invalida x(\n");
 					}
+					
 				} while(auxiliar != 3);
+				
 				break;
+				
 			case 5:
+				
 				printf("Obrigado por usar nossos servicos ;)\n");
 				auxiliar = 1;
+				
 				break;
+				
 			default:
 				printf("[ERROR] Opcao invalida x(\n");
 		}
-	}while(auxiliar != 1);
+		
+	} while(auxiliar != 1);
 	
-	liberar(primeiro);
+	liberar(primeiroUsuario);
 	
 	return 0;
 }
@@ -172,7 +198,7 @@ void separador() {
 	printf("-------------------------------------\n");
 }
 
-void add_usuarios() {
+void adicionarUsuarios() {
 	Facebook *usuarios = malloc(sizeof(Facebook));
 	
 	fflush(stdin);
@@ -191,24 +217,25 @@ void add_usuarios() {
 	printf("Idade: ");
 	scanf("%d", &usuarios->idade);
 	
-	tamanho++;
-	usuarios->id = tamanho;
+	qtdUsuarios++;
+	usuarios->id = qtdUsuarios;
 	
 	usuarios->prox = NULL;
-	if(primeiro == NULL) {
-		primeiro = usuarios;
+	if(primeiroUsuario == NULL) {
+		primeiroUsuario = usuarios;
 	} else{
-		Facebook *auxi = primeiro;
+		Facebook *auxiliarUsuario = primeiroUsuario;
 		
-		while(auxi->prox != NULL) {
-			auxi = auxi->prox;
+		while(auxiliarUsuario->prox != NULL) {
+			auxiliarUsuario = auxiliarUsuario->prox;
 		}
 		
-		auxi->prox = usuarios;
+		auxiliarUsuario->prox = usuarios;
 	}
 }
 
-void mostrar_usuarios(Facebook *usuarios) {
+void mostrarUsuarios(Facebook *usuarios) {
+	
 	if(usuarios != NULL) {
 		printf("\n\n");
 		separador();
@@ -220,11 +247,13 @@ void mostrar_usuarios(Facebook *usuarios) {
 		separador();
 		printf("\n\n");
 		
-		mostrar_usuarios(usuarios->prox);
+		mostrarUsuarios(usuarios->prox);
 	}
+	
 }
 
-void procurar_usuarios_nome(Facebook *usuarios, char nome[]) {
+void procurarUsuariosPorNome(Facebook *usuarios, char nome[]) {
+	
 	if(usuarios != NULL) {
 		if(strcmp(nome, usuarios->nome) == 0) {
 			printf("\n\n");
@@ -238,12 +267,15 @@ void procurar_usuarios_nome(Facebook *usuarios, char nome[]) {
 			printf("\n\n");
 		}
 			
-		procurar_usuarios_nome(usuarios->prox, nome);
+		procurarUsuariosPorNome(usuarios->prox, nome);
 	}
+	
 }
 
-void procurar_usuarios_id(Facebook *usuarios, int id) {
+void procurarUsuariosPorId(Facebook *usuarios, int id) {
+	
 	if(usuarios != NULL) {
+		
 		if(id == usuarios->id) {
 			printf("\n\n");
 			separador();
@@ -256,35 +288,36 @@ void procurar_usuarios_id(Facebook *usuarios, int id) {
 			printf("\n\n");
 		}
 			
-		procurar_usuarios_id(usuarios->prox, id);
+		procurarUsuariosPorId(usuarios->prox, id);
 	}
+	
 }
 
-void relacao(int amigo1, int amigo2, Facebook *usuarios) {
+void tipoDeRelacao(int amigo1, int amigo2, Facebook *usuarios) {
 		Facebook *aux = usuarios;
-		Facebook *aux_add, *amizade;
+		Facebook *auxAdicionar, *amizade;
 		
 		while(amigo1 != aux->id) {
 			aux = aux->prox;
 		}
 		
 		if(amigo1 == aux->id) {
-			aux_add = primeiro;
+			auxAdicionar = primeiroUsuario;
 			
-			while(amigo2 != aux_add->id && aux_add->prox != NULL) {
-				aux_add = aux_add->prox;
+			while(amigo2 != auxAdicionar->id && auxAdicionar->prox != NULL) {
+				auxAdicionar = auxAdicionar->prox;
 			}
 			
 		} 
 		
-		if(amigo2 == aux_add->id) {
+		if(amigo2 == auxAdicionar->id) {
 			amizade = aux;
 				
 			while(amizade->amigos != NULL) {
 				amizade = amizade->amigos;
 			}
 				
-			amizade->amigos = aux_add;
+			amizade->amigos = auxAdicionar;
 			
 		} else {
 			int decisao;
@@ -298,41 +331,50 @@ void relacao(int amigo1, int amigo2, Facebook *usuarios) {
 			scanf("%d", &decisao);
 			
 			switch(decisao) {
+				
 				case 1:
 					
-					add_usuarios();
+					adicionarUsuarios();
 					separador();
-					relacao(amigo1, amigo2, primeiro);
+					tipoDeRelacao(amigo1, amigo2, primeiroUsuario);
 					separador();
+					
 					break;
+					
 				case 2:
 					
-					liberar(primeiro);
+					liberar(primeiroUsuario);
 					printf("Encerrado programa .....\n");
 					exit(0);
-					break;
-				default:
 					
+					break;
+					
+				default:
 					printf("[ERROR] Opcao invalida :x\n");
 			}
+			
 		}
 		
 		printf("%s adicionou %s na lista de amizade\n", aux->nome, aux->amigos->nome);
 }
 
-void relacao_amizade(Facebook *usuarios) {
+void relacaoDeAmizade(Facebook *usuarios) {
+	
 	if(usuarios != NULL) {
 		printf("%s - %s\n", usuarios->nome, usuarios->amigos->nome);
 		
 		usuarios = usuarios->prox;
 	}
+	
 }
 
 void liberar(Facebook *usuarios) {
+	
 	if(usuarios != NULL) {
 		
 		liberar(usuarios->prox);
 		free(usuarios);
 	}
+	
 }
 

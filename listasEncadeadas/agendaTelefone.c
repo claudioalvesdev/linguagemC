@@ -18,7 +18,7 @@
 	c) Buscar por nome da pessoa e mostrar os dados da agenda - Caso a pessoa nao exista, mostrar uma mensagem informando.
 	d) O programa deve ter um menu principal oferecendo as opções acima.*/
 	
-struct dados_pessoais {
+struct dadosPessoais {
 	char nome[80];
 	char email[80];
 	char observacao[20];
@@ -32,12 +32,12 @@ struct endereco {
 	char estado[30];
 	char pais[30];
 	char cep[12];
-	char n_casa[8];
+	char numeroDaCasa[8];
 };
 
 struct telefone {
 	int ddd;
-	int n_telefone;
+	int numeroDeTelefone;
 };
 
 struct aniversario {
@@ -47,7 +47,7 @@ struct aniversario {
 };
 
 struct cadastro {
-	struct dados_pessoais pessoais;
+	struct dadosPessoais pessoais;
 	struct endereco Endereco;
 	struct telefone Telefone;
 	struct aniversario Aniversario;
@@ -55,13 +55,110 @@ struct cadastro {
 };
 
 typedef struct cadastro Cadastro;
-Cadastro *primeiro;
+Cadastro *primeiroCliente;
+
+void separador();
+
+void adicionarClientes();
+
+void mostrarClientes(Cadastro *clientes);
+
+void procurarNome(Cadastro *clientes, char pesquisarNome[]);
+
+int main() {
+	int opcao, auxiliar;
+  	char condicao, nome[80];
+	
+	do{
+		separador();
+		printf("\tMENU\n");
+		separador();
+		printf("[1] - Abrir agenda\n");
+		printf("[2] - Sair\n");
+		separador();
+		printf("Sua opcao: ");
+		scanf("%d", &opcao);
+		
+		switch(opcao) {
+			
+			case 1:
+				
+				do {
+					separador();
+					printf("[1] - Inserir contato no topo\n");
+					printf("[2] - Ver todos os contatos\n");
+					printf("[3] - Procurar contatos por nome\n");
+					printf("[4] - Voltar\n");
+					separador();
+					printf("Sua opcao: ");
+					scanf("%d", &opcao);
+					
+					switch(opcao) {
+						
+						case 1:
+							
+							do{
+								adicionarClientes();
+								fflush(stdin);
+								printf("Deseja continuar [s / n] : ");
+								scanf("%s", &condicao);
+							} while(condicao != 'n');
+							
+							break;
+							
+						case 2: 
+						
+							mostrarClientes(primeiroCliente);
+							
+							break;
+							
+						case 3:
+							
+							fflush(stdin);
+							printf("Informe o nome desejado: ");
+							scanf("%s", &nome);
+							procurarNome(primeiroCliente, nome);
+							
+							break;
+							
+						case 4:
+							
+							auxiliar = 2;
+							
+							break;
+							
+						default:
+							printf("\n[ERRO] Opcao Invalida :(\n");
+							
+					}	
+					
+				} while(auxiliar != 2);
+				
+				break;
+				
+			case 2:
+				
+				auxiliar = 1;
+				
+				break;
+				
+			default:
+				printf("\n[ERRO] Opcao Invalida :(\n");
+				
+		}
+		
+	} while(auxiliar != 1);
+	
+	printf("Obrigado por usar nossos servicos :)\n");
+	
+	return 0;
+}
 
 void separador() {
 	printf("---------------------------\n");
 }
 
-void add() {
+void adicionarClientes() {
 	Cadastro *clientes = malloc(sizeof(Cadastro));
 	
 	fflush(stdin);
@@ -79,7 +176,7 @@ void add() {
 							
 	fflush(stdin);
 	printf("Numero: ");
-	gets(clientes->Endereco.n_casa);
+	gets(clientes->Endereco.numeroDaCasa);
 							
 	fflush(stdin);
 	printf("Complemento: ");
@@ -112,7 +209,7 @@ void add() {
 						
 	fflush(stdin);
 	printf("N Telefone: ");
-	scanf("%d", &clientes->Telefone.n_telefone);
+	scanf("%d", &clientes->Telefone.numeroDeTelefone);
 					
 	fflush(stdin);
 	printf("Aniversario\n");
@@ -131,99 +228,44 @@ void add() {
 	printf("Obersavacao: ");
 	gets(clientes->pessoais.observacao);
 	
-	clientes->prox = primeiro;
-    primeiro = clientes;
+	clientes->prox = primeiroCliente;
+    primeiroCliente = clientes;
 }
 
-void imprimir(Cadastro *clientes) {
+void mostrarClientes(Cadastro *clientes) {
+	
 	if(clientes != NULL) {
 		printf("\nNome: %s\n", clientes->pessoais.nome);
 		printf("E-mail: %s\n", clientes->pessoais.email);
-		printf("Endereco: Rua %s %s %s ", clientes->Endereco.rua, clientes->Endereco.n_casa, clientes->Endereco.bairro);
+		printf("Endereco: Rua %s %s %s ", clientes->Endereco.rua, clientes->Endereco.numeroDaCasa, clientes->Endereco.bairro);
 		printf("%s\n%s %s %s %s\n", clientes->Endereco.cep, clientes->Endereco.cidade, clientes->Endereco.estado, 
 		clientes->Endereco.pais, clientes->Endereco.complemento);
-		printf("Telefone: (%d) %d\n", clientes->Telefone.ddd, clientes->Telefone.n_telefone);
+		printf("Telefone: (%d) %d\n", clientes->Telefone.ddd, clientes->Telefone.numeroDeTelefone);
 		printf("Data de nascimento: %d/%d/%d\n", clientes->Aniversario.dia, clientes->Aniversario.mes, clientes->Aniversario.ano);
 		printf("Observacao: %s\n\n\n", clientes->pessoais.observacao);
-		imprimir(clientes->prox);
+		mostrarClientes(clientes->prox);
 	}
+	
 }
 
-void procurar_nome(Cadastro *clientes, char p_nome[]) {
+void procurarNome(Cadastro *clientes, char pesquisarNome[]) {
+	
 	if(clientes != NULL) {
-		if(strcmp(p_nome, clientes->pessoais.nome) == 0) {
-		printf("\nNome: %s\n", clientes->pessoais.nome);
-		printf("E-mail: %s\n", clientes->pessoais.email);
-		printf("Endereco: Rua %s %s %s ", clientes->Endereco.rua, clientes->Endereco.n_casa, clientes->Endereco.bairro);
-		printf("%s\n%s %s %s %s\n", clientes->Endereco.cep, clientes->Endereco.cidade, clientes->Endereco.estado, 
-		clientes->Endereco.pais, clientes->Endereco.complemento);
-		printf("Telefone: (%d) %d\n", clientes->Telefone.ddd, clientes->Telefone.n_telefone);
-		printf("Data de nascimento: %d/%d/%d\n", clientes->Aniversario.dia, clientes->Aniversario.mes, clientes->Aniversario.ano);
-		printf("Observacao: %s\n\n\n", clientes->pessoais.observacao);
+		
+		if(strcmp(pesquisarNome, clientes->pessoais.nome) == 0) {
+			printf("\nNome: %s\n", clientes->pessoais.nome);
+			printf("E-mail: %s\n", clientes->pessoais.email);
+			printf("Endereco: Rua %s %s %s ", clientes->Endereco.rua, clientes->Endereco.numeroDaCasa, clientes->Endereco.bairro);
+			printf("%s\n%s %s %s %s\n", clientes->Endereco.cep, clientes->Endereco.cidade, clientes->Endereco.estado, 
+			clientes->Endereco.pais, clientes->Endereco.complemento);
+			printf("Telefone: (%d) %d\n", clientes->Telefone.ddd, clientes->Telefone.numeroDeTelefone);
+			printf("Data de nascimento: %d/%d/%d\n", clientes->Aniversario.dia, clientes->Aniversario.mes, clientes->Aniversario.ano);
+			printf("Observacao: %s\n\n\n", clientes->pessoais.observacao);
 		}	
-		procurar_nome(clientes->prox, p_nome);
+		
+		procurarNome(clientes->prox, pesquisarNome);
 	}
-}
-
-int main() {
-	int opcao, aux;
-  	char condicao, nome[80];
 	
-	do{
-		separador();
-		printf("\tMENU\n");
-		separador();
-		printf("[1] - Abrir agenda\n");
-		printf("[2] - Sair");
-		printf("\nSua opcao: ");
-		scanf("%d", &opcao);
-		switch(opcao) {
-			case 1:
-				do {
-					separador();
-					printf("[1] - Inserir contato no topo\n");
-					printf("[2] - Ver todos os contatos\n");
-					printf("[3] - Procurar contatos por nome\n");
-					printf("[4] - Voltar\n");
-					separador();
-					printf("Sua opcao: ");
-					scanf("%d", &opcao);
-					switch(opcao) {
-						case 1:
-							condicao = 's';
-            				while(condicao != 'n') {
-            					add();
-								fflush(stdin);
-								printf("Deseja continuar [s / n] : ");
-								scanf("%s", &condicao);
-            				}
-							break;
-						case 2: 
-							imprimir(primeiro);
-							break;
-						case 3:
-							fflush(stdin);
-							printf("Informe o nome desejado: ");
-							scanf("%s", &nome);
-							procurar_nome(primeiro, nome);
-							break;
-						case 4:
-							aux = 2;
-							break;
-						default:
-							printf("\n[ERRO] Opcao Invalida :(\n");
-					}	
-				} while(aux != 2);
-				break;
-			case 2:
-				aux = 1;
-				break;
-			default:
-				printf("\n[ERRO] Opcao Invalida :(\n");
-		}
-	} while(aux != 1);
-	
-	return 0;
 }
 
 

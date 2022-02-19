@@ -23,23 +23,23 @@ struct historico{
 };
 
 typedef struct historico Web;
-Web *topo;
-int tamanho = 0;
+Web *primeiroSite;
+int qtdDeSites = 0;
 
 void separador();
 
-void adicionar_pag();
+void adicionarPaginas();
 
-void remover_pag_atual();
+void removerPaginaAtual();
 
-void mostrar_pag_atual();
+void mostrarPaginaAtual();
 
-void mostrar_historico(Web *sites);
+void mostrarHistorico(Web *sites);
 
 void liberar(Web *sites);
 
 int main() {
-	int aux = 0, escolha;
+	int auxiliar = 0, opcao;
 	char condicao;
 	
 	do{
@@ -53,49 +53,57 @@ int main() {
 		printf("[5] - Sair\n");
 		separador();
 		printf("Sua opcao: ");
-		scanf("%d", &escolha);
+		scanf("%d", &opcao);
 		
-		switch(escolha) {
+		switch(opcao) {
+			
 			case 1:
-				condicao = 's';
 				
-				while(condicao != 'n') {
-					adicionar_pag();
-					
+				do{
+					adicionarPaginas();
 					printf("Desejar continuar [s / n]: ");
-					scanf("%s", &condicao);
-				}
+					scanf("%s", &condicao);	
+				} while(condicao != 'n');
 				
 				break;
+				
 			case 2:
 				
-				remover_pag_atual();
+				removerPaginaAtual();
+				
 				break;
+				
 			case 3:
 				
-				mostrar_pag_atual();
+				mostrarPaginaAtual();
+				
 				break;
+				
 			case 4:
 				
-				if(topo == NULL) {
+				if(primeiroSite == NULL) {
 					printf("[ERROR] Paginas inexistentes x(\n");
 				} else{
-					mostrar_historico(topo);	
+					mostrarHistorico(primeiroSite);	
 				}
+				
 				break;
+				
 			case 5:
 				
-				aux = 1;
-				break;
-			default:
+				auxiliar = 1;
 				
+				break;
+				
+			default:
 				printf("[ERROR] Opcao invalida x(\n");
 		}
 			
-	} while(aux != 1);
+	} while(auxiliar != 1);
 	
-	liberar(topo);
+	liberar(primeiroSite);
 	
+	printf("Obrigado por usar nossos servicos :)\n");
 	
 	return 0;
 }
@@ -104,28 +112,26 @@ void separador() {
 	printf("---------------------------\n");
 }
 
-void adicionar_pag() {
+void adicionarPaginas() {
 	Web *sites = malloc(sizeof(Web));
-	char opcao;
+	char condicao;
 	
-	if(tamanho == MAX) {
+	if(qtdDeSites == MAX) {
 		
 		separador();
 		printf("[ERROR] Voce atingiu o numero\n");
 		printf("maximo de paginas cadastradas\n");
 		separador();
 		printf("Desejar excluir a pagina anterior? [s / n]: ");
-		scanf("%s", &opcao);
+		scanf("%s", &condicao);
 		separador();
 		
-		if(opcao == 's') {
-			
-			remover_pag_atual();
-			adicionar_pag();	
+		if(condicao == 's') {
+			removerPaginaAtual();
+			adicionarPaginas();	
 		} else{
-			
 			printf("Esse e seu historico atual ;)\n\n");
-			mostrar_historico(topo);
+			mostrarHistorico(primeiroSite);
 			separador();
 		}
 		
@@ -135,46 +141,54 @@ void adicionar_pag() {
 		printf("Site: ");
 		gets(sites->address);
 	
-		sites->prox = topo;
-		topo = sites;
-		tamanho++;	
+		sites->prox = primeiroSite;
+		primeiroSite = sites;
+		qtdDeSites++;	
 	}
 }
 
-void remover_pag_atual() {
-	if(topo == NULL) {
+void removerPaginaAtual() {
+	
+	if(primeiroSite == NULL) {
 		printf("[ERROR] Historico inexistente :x\n");
 	} else{
-		Web *remover = topo;
+		Web *removerSite = primeiroSite;
 		
-		topo = topo->prox;
-		free(remover);
+		primeiroSite = primeiroSite->prox;
+		free(removerSite);
 		printf("Remocao feita com sucesso : ) !!!\n");
-		tamanho--;
+		qtdDeSites--;
 	}
+	
 }
 
-void mostrar_pag_atual() {
-	if(topo == NULL) {
+void mostrarPaginaAtual() {
+	
+	if(primeiroSite == NULL) {
 		printf("[ERROR] Nenhuma pagina aberta :x\n");
 	} else{
-		Web *atual = topo;
+		Web *siteAtual = primeiroSite;
 		
-		printf("Pagina atual: %s\n", atual->address);
+		printf("Pagina atual: %s\n", siteAtual->address);
 	}
+	
 }
 
-void mostrar_historico(Web *sites) {
+void mostrarHistorico(Web *sites) {
+	
 	if(sites != NULL) {
 		printf("Site: %s\n", sites->address);
-		mostrar_historico(sites->prox);
+		mostrarHistorico(sites->prox);
 	}
+	
 }
 
 void liberar(Web *sites) {
+	
 	if(sites != NULL) {
 		liberar(sites->prox);
 		
 		free(sites);
 	}
+	
 }

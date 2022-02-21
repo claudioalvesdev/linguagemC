@@ -7,151 +7,151 @@
 
 struct arvore {
 	int valor;
-	struct arvore *direita;
-	struct arvore *esquerda;
+	struct arvore *noDireita;
+	struct arvore *noEsquerda;
 };
 
 typedef struct arvore Arvore;
 
-Arvore *criar(int valor);
+Arvore *criarNo(int valor);
 
-void adicionar(Arvore *sub_arvores, int valor);
+void adicionarNo(Arvore *no, int valor);
 
-void mostrar_arvore(Arvore *sub_arvores);
+void mostrarArvore(Arvore *no);
 
-void remocao(Arvore *sub_arvores, int valor);
+void excluirNo(Arvore *no, int valor);
 
 int main() {
-	Arvore *raiz = criar(21);
+	Arvore *raiz = criarNo(21);
 	
-	adicionar(raiz, 17);
-	adicionar(raiz, 11);
-	adicionar(raiz, 7);
-	adicionar(raiz, 13);
-	adicionar(raiz, 19);
-	adicionar(raiz, 31);
-	adicionar(raiz, 41);
-	adicionar(raiz, 23);
+	adicionarNo(raiz, 17);
+	adicionarNo(raiz, 11);
+	adicionarNo(raiz, 7);
+	adicionarNo(raiz, 13);
+	adicionarNo(raiz, 19);
+	adicionarNo(raiz, 31);
+	adicionarNo(raiz, 41);
+	adicionarNo(raiz, 23);
 
-	mostrar_arvore(raiz);
+	mostrarArvore(raiz);
 	printf("\n");
-	remocao(raiz, 17);
-	mostrar_arvore(raiz);
+	excluirNo(raiz, 17);
+	mostrarArvore(raiz);
 	
 	return 0;
 }
 
-Arvore *criar(int valor) {
-	Arvore *sub_arvores = malloc(sizeof(Arvore));
+Arvore *criarNo(int valor) {
+	Arvore *no = malloc(sizeof(Arvore));
 	
-	sub_arvores->valor = valor;
-	sub_arvores->direita = NULL;
-	sub_arvores->esquerda = NULL;
+	no->valor = valor;
+	no->noDireita = NULL;
+	no->noEsquerda = NULL;
 	
-	return sub_arvores;
+	return no;
 }
 
-void adicionar(Arvore *sub_arvores, int valor) {
+void adicionarNo(Arvore *no, int valor) {
 	
-	if(valor < sub_arvores->valor) {
+	if(valor < no->valor) {
 		
-		if(sub_arvores->esquerda == NULL) {
-			sub_arvores->esquerda = criar(valor);
+		if(no->noEsquerda == NULL) {
+			no->noEsquerda = criarNo(valor);
 		} else {
-			adicionar(sub_arvores->esquerda, valor);
+			adicionarNo(no->noEsquerda, valor);
 		}
 		
 	} else {
 		
-		if(sub_arvores->direita == NULL) {
-			sub_arvores->direita = criar(valor);
+		if(no->noDireita == NULL) {
+			no->noDireita = criarNo(valor);
 		} else {
-			adicionar(sub_arvores->direita, valor);
+			adicionarNo(no->noDireita, valor);
 		}
 		
 	}
 	
 }
 
-void mostrar_arvore(Arvore *sub_arvores) {
+void mostrarArvore(Arvore *no) {
 	
-	if(sub_arvores == NULL) {
+	if(no == NULL) {
 		return;
 	}
 	
-	mostrar_arvore(sub_arvores->esquerda);
-	printf("%d ", sub_arvores->valor);
-	mostrar_arvore(sub_arvores->direita);
+	mostrarArvore(no->noEsquerda);
+	printf("%d ", no->valor);
+	mostrarArvore(no->noDireita);
 }
 
-void remocao(Arvore *sub_arvores, int valor) {
-	Arvore *filho = sub_arvores;
-	Arvore *pai;
+void excluirNo(Arvore *no, int valor) {
+	Arvore *noAtual = no;
+	Arvore *noAnterior;
 	
 	do{
-		pai = filho;
+		noAnterior = noAtual;
 		
-		if(valor < filho->valor) {
-			filho = filho->esquerda;
-		} else if(valor > filho->valor) {
-			filho = filho->direita;
+		if(valor < noAtual->valor) {
+			noAtual = noAtual->noEsquerda;
+		} else if(valor > noAtual->valor) {
+			noAtual = noAtual->noDireita;
 		}
 		
-	} while(filho != NULL && valor != filho->valor);
+	} while(noAtual != NULL && valor != noAtual->valor);
 	
-	if(filho != NULL) {
+	if(noAtual != NULL) {
 		
-		if(filho->direita == NULL  && filho->esquerda == NULL) {
+		if(noAtual->noDireita == NULL  && noAtual->noEsquerda == NULL) {
 			
-			if(pai->direita == filho) {
-				pai->direita = NULL; 
+			if(noAnterior->noDireita == noAtual) {
+				noAnterior->noDireita = NULL; 
 			}
 			
-			if(pai->esquerda == filho) {
-				pai->esquerda = NULL;
+			if(noAnterior->noEsquerda == noAtual) {
+				noAnterior->noEsquerda = NULL;
 			}
 			
 		}
 		
-		if (filho->direita != NULL && filho->esquerda == NULL) {
+		if (noAtual->noDireita != NULL && noAtual->noEsquerda == NULL) {
 			
-			if(pai->direita == filho) {
-				pai->direita = filho->direita;
+			if(noAnterior->noDireita == noAtual) {
+				noAnterior->noDireita = noAtual->noDireita;
 			}
 			
-			if(pai->esquerda == filho) {
-				pai->esquerda = filho->direita;
-			}
-			
-		}
-		
-		if(filho->esquerda != NULL && filho->direita == NULL) {
-			
-			if(pai->direita == filho) {
-				pai->direita = filho->esquerda;
-			}
-			
-			if(pai->esquerda == filho) {
-				pai->esquerda = filho->esquerda;
+			if(noAnterior->noEsquerda == noAtual) {
+				noAnterior->noEsquerda = noAtual->noDireita;
 			}
 			
 		}
 		
-		if(filho->direita != NULL && filho->esquerda != NULL) {
+		if(noAtual->noEsquerda != NULL && noAtual->noDireita == NULL) {
 			
-			if(filho->esquerda->direita == NULL) {
-				filho->valor = filho->esquerda->valor;
+			if(noAnterior->noDireita == noAtual) {
+				noAnterior->noDireita = noAtual->noEsquerda;
+			}
+			
+			if(noAnterior->noEsquerda == noAtual) {
+				noAnterior->noEsquerda = noAtual->noEsquerda;
+			}
+			
+		}
+		
+		if(noAtual->noDireita != NULL && noAtual->noEsquerda != NULL) {
+			
+			if(noAtual->noEsquerda->noDireita == NULL) {
+				noAtual->valor = noAtual->noEsquerda->valor;
 			} else {
-				Arvore *p = filho->esquerda;
-				Arvore *aux = p;
+				Arvore *novoNo = noAtual->noEsquerda;
+				Arvore *noAuxiliar = novoNo;
 				
-				while(p->direita != NULL) {
-					aux = p;
-					p = p->direita;
+				while(novoNo->noDireita != NULL) {
+					noAuxiliar = novoNo;
+					novoNo = novoNo->noDireita;
 				}
 				
-				aux->direita = NULL;
-				filho->valor = p->valor;
+				noAuxiliar->noDireita = NULL;
+				noAtual->valor = novoNo->valor;
 			}
 			
 		}

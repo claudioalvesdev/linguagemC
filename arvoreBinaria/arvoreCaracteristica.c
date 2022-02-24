@@ -11,34 +11,34 @@
 	
 struct arvore {
 	int valor;
-	struct arvore *direita;
-	struct arvore *esquerda;
+	struct arvore *noDireita;
+	struct arvore *noEsquerda;
 };
 
 typedef struct arvore Nodo;
 
-Nodo *criar_nodo(int valor);
+Nodo *criarNo(int valor);
 
-void adicionar_nodo(Nodo *no, int valor);
+void adicionarNo(Nodo *no, int valor);
 
-void mostrar_arvore(Nodo *no);
+void mostrarArvore(Nodo *no);
 
 void separador();
 
-int quantidade_nodo(Nodo *no) ;
+int quantidadeDeNo(Nodo *no) ;
 
-int maior_altura(int valor_esquerda, int valor_direita) ;
+int maiorAlturaDaArvore(int valorEsquerda, int valorDireita) ;
 
-int altura_nodo(Nodo *no) ;
+int alturaDoMaiorNo(Nodo *no) ;
 
-int maior_valor_da_arvore(Nodo *no);
+int maiorValorDaArvore(Nodo *no);
 
-void remover_nodo(Nodo *no, int valor);
+void removerNo(Nodo *no, int valor);
 
 int main() {
-	int opcao, contador = 0, valor, condicao = 0, no_quantidade, altura_arvore, maior_valor;
-	char escolha;
-	Nodo *no_raiz;
+	int opcao, contador = 0, valor, escolha = 0, qtdNo, alturaArvore, maiorValor;
+	char condicao;
+	Nodo *noRaiz;
 	
 	do {
 		separador();
@@ -56,54 +56,56 @@ int main() {
 		scanf("%d", &opcao);
 		
 		switch(opcao) {
+			
 			case 1: 
 				
 				do{
+					
 					if(contador == 0) {
 						printf("Digite o valor: ");
 						scanf("%d", &valor);
-						no_raiz = criar_nodo(valor);
+						noRaiz = criarNo(valor);
 					} else {
 						printf("Digite o valor: ");
 						scanf("%d", &valor);
-						adicionar_nodo(no_raiz, valor);
+						adicionarNo(noRaiz, valor);
 					}
 					
 					contador++;
 					
 					printf("Desejar continuar? [s / n] : ");
-					scanf("%s", &escolha);
+					scanf("%s", &condicao);
 					
-				} while(escolha != 'n');
+				} while(condicao != 'n');
 				
 				break;
 				
 			case 2:
 				
 				printf("\nOs valores adicionados sao: \n");
-				mostrar_arvore(no_raiz);
+				mostrarArvore(noRaiz);
 				printf("\n");
 				
 				break;
 			
 			case 3:
 				
-				no_quantidade = quantidade_nodo(no_raiz);
-				printf("Quantidade de nos: %d\n", no_quantidade);
+				qtdNo = quantidadeDeNo(noRaiz);
+				printf("Quantidade de nos: %d\n", qtdNo);
 				
 				break;
 			
 			case 4: 
 				
-				altura_arvore = altura_nodo(no_raiz);
-				printf("Altura da arvore: %d\n", altura_arvore);
+				alturaArvore = alturaDoMaiorNo(noRaiz);
+				printf("Altura da arvore: %d\n", alturaArvore);
 				
 				break;
 				
 			case 5:
 				
-				maior_valor = maior_valor_da_arvore(no_raiz);
-				printf("O maior valor : %d\n", maior_valor);
+				maiorValor = maiorValorDaArvore(noRaiz);
+				printf("O maior valor : %d\n", maiorValor);
 				
 				break;
 				
@@ -112,13 +114,13 @@ int main() {
 				printf("Deseja remover qual numero?\n");
 				printf("Valor: ");
 				scanf("%d", &valor);
-				remover_nodo(no_raiz, valor);
+				removerNo(noRaiz, valor);
 				
 				break;
 				
 			case 7:
 				
-				condicao = 2;
+				escolha = 2;
 				
 				break;
 				
@@ -126,170 +128,173 @@ int main() {
 				printf("[ERROR] Opcao invalida x(\n");
 		}
 		
-	} while(condicao != 2);
+	} while(escolha != 2);
+	
+	printf("Obrigado por usar nossos servicos :)\n");
 
 	
 	return 0;
 }
 
-Nodo *criar_nodo(int valor) {
+Nodo *criarNo(int valor) {
 	Nodo *no = malloc(sizeof(Nodo));
 	
 	no->valor = valor;
-	no->direita = NULL;
-	no->esquerda = NULL;
+	no->noDireita = NULL;
+	no->noEsquerda = NULL;
 	
 	return no;
 }
 
-void adicionar_nodo(Nodo *no, int valor) {
+void adicionarNo(Nodo *no, int valor) {
 	
 	if(valor > no->valor) {
 		
-		if(no->direita == NULL) {
-			no->direita = criar_nodo(valor);
+		if(no->noDireita == NULL) {
+			no->noDireita = criarNo(valor);
 		} else {
-			adicionar_nodo(no->direita, valor);
+			adicionarNo(no->noDireita, valor);
 		}
 		
 	} else {
 		
-		if(no->esquerda == NULL) {
-			no->esquerda = criar_nodo(valor);
+		if(no->noEsquerda == NULL) {
+			no->noEsquerda = criarNo(valor);
 		} else {
-			adicionar_nodo(no->esquerda, valor);
+			adicionarNo(no->noEsquerda, valor);
 		}
 		
 	}
 	
 }
 
-void mostrar_arvore(Nodo *no) {
+void mostrarArvore(Nodo *no) {
 	
 	if(no == NULL) {
 		return;
 	}
 	
-	mostrar_arvore(no->esquerda);
+	mostrarArvore(no->noEsquerda);
 	printf("%d ", no->valor);
-	mostrar_arvore(no->direita);
+	mostrarArvore(no->noDireita);
 }
 
 void separador() {
 	printf("------------------------------\n");
 }
 
-int quantidade_nodo(Nodo *no) {
+int quantidadeDeNo(Nodo *no) {
 	
 	if(no == NULL) {
 		return 0;
 	} else {
-		return 1 + quantidade_nodo(no->direita) + quantidade_nodo(no->esquerda);
+		return 1 + quantidadeDeNo(no->noDireita) + quantidadeDeNo(no->noEsquerda);
 	}
 	
 }
 
-int maior_altura(int valor_esquerda, int valor_direita) {
+int maiorAlturaDaArvore(int valorEsquerda, int valorDireita) {
 	
-	if(valor_esquerda > valor_direita) {
-		return valor_esquerda;
+	if(valorEsquerda > valorDireita) {
+		return valorEsquerda;
 	} else {
-		return valor_direita;
+		return valorDireita;
 	}
 }
 
-int altura_nodo(Nodo *no) {
+int alturaDoMaiorNo(Nodo *no) {
 	
-	if((no == NULL) || (no->direita == NULL && no->esquerda == NULL)) {
+	if((no == NULL) || (no->noDireita == NULL && no->noEsquerda == NULL)) {
 		return 0;
 	} else {
-		return 1 + maior_altura(altura_nodo(no->esquerda), altura_nodo(no->direita));
+		return 1 + maiorAlturaDaArvore(alturaDoMaiorNo(no->noEsquerda), alturaDoMaiorNo(no->noDireita));
 	}
 }
 
-int maior_valor_da_arvore(Nodo *no) {
+int maiorValorDaArvore(Nodo *no) {
 	
-	if(no->direita != NULL) {
-		return maior_valor_da_arvore(no->direita);
+	if(no->noDireita != NULL) {
+		return maiorValorDaArvore(no->noDireita);
 	} else {
 		return no->valor;
 	}
 	
 }
 
-void remover_nodo(Nodo *no, int valor) {
-	Nodo *filho = no;
-	Nodo *pai;
+void removerNo(Nodo *no, int valor) {
+	Nodo *noAtual = no;
+	Nodo *noAnterior;
 	
 	do{
-		pai = filho;
+		noAnterior = noAtual;
 		
-		if(valor < filho->valor) {
-			filho = filho->esquerda;
-		} else if(valor > filho->valor) {
-			filho = filho->direita;
+		if(valor < noAtual->valor) {
+			noAtual = noAtual->noEsquerda;
+		} else if(valor > noAtual->valor) {
+			noAtual = noAtual->noDireita;
 		}
 		
-	} while(filho != NULL && filho->valor != valor);
+	} while(noAtual != NULL && valor != noAtual->valor);
 	
-	if(filho != NULL) {
+	if(noAtual != NULL) {
 		
-		printf("\nValor %d removido com sucesso\n", valor);
-				
-		if(filho->esquerda == NULL && filho->direita == NULL) {
+		if(noAtual->noDireita == NULL  && noAtual->noEsquerda == NULL) {
 			
-			if(pai->esquerda == filho) {
-				pai->esquerda = NULL;
+			if(noAnterior->noDireita == noAtual) {
+				noAnterior->noDireita = NULL; 
 			}
-			if(pai->direita == filho) {
-				pai->direita = NULL;
+			
+			if(noAnterior->noEsquerda == noAtual) {
+				noAnterior->noEsquerda = NULL;
 			}
 			
 		}
 		
-		if(filho->esquerda != NULL && filho->direita == NULL) {
+		if (noAtual->noDireita != NULL && noAtual->noEsquerda == NULL) {
 			
-			if(pai->esquerda == filho) {
-				pai->esquerda = filho->esquerda;
-			}
-			if(pai->direita == filho) {
-				pai->direita = filho->esquerda;
+			if(noAnterior->noDireita == noAtual) {
+				noAnterior->noDireita = noAtual->noDireita;
 			}
 			
-		}
-		
-		if(filho->esquerda == NULL && filho->direita != NULL) {
-			
-			if(pai->esquerda == filho) {
-				pai->esquerda = filho->direita;
-			}
-			if(pai->direita == filho) {
-				pai->direita = filho->direita;
+			if(noAnterior->noEsquerda == noAtual) {
+				noAnterior->noEsquerda = noAtual->noDireita;
 			}
 			
 		}
 		
-		if(filho->esquerda != NULL && filho->direita != NULL) {
+		if(noAtual->noEsquerda != NULL && noAtual->noDireita == NULL) {
 			
-			if(filho->esquerda->direita == NULL) {
-				filho->valor = filho->esquerda->valor;
-				filho->esquerda = NULL;
+			if(noAnterior->noDireita == noAtual) {
+				noAnterior->noDireita = noAtual->noEsquerda;
+			}
+			
+			if(noAnterior->noEsquerda == noAtual) {
+				noAnterior->noEsquerda = noAtual->noEsquerda;
+			}
+			
+		}
+		
+		if(noAtual->noDireita != NULL && noAtual->noEsquerda != NULL) {
+			
+			if(noAtual->noEsquerda->noDireita == NULL) {
+				noAtual->valor = noAtual->noEsquerda->valor;
 			} else {
-				Nodo *no_aux = filho->esquerda;
-				Nodo *aux = no_aux;
+				Nodo *novoNo = noAtual->noEsquerda;
+				Nodo *noAuxiliar = novoNo;
 				
-				while(no_aux->direita != NULL) {
-					aux = no_aux;
-					no_aux = no_aux->direita;
+				while(novoNo->noDireita != NULL) {
+					noAuxiliar = novoNo;
+					novoNo = novoNo->noDireita;
 				}
 				
-				aux->direita = NULL;
-				filho->valor = no_aux->valor;
+				noAuxiliar->noDireita = NULL;
+				noAtual->valor = novoNo->valor;
 			}
 			
 		}
+		
 	} else {
-		printf("\n[ERROR] Valor nao encontrado X(\n");
+		printf("[ERRO] Nao foi possivel fazer essa alteracao :(\n");
 	}
 }
 

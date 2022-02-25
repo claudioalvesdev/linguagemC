@@ -17,30 +17,30 @@
 	*/
 	
 struct jogadores {
-	int numero_jogador;
-	char nome_jogador[80];
+	int numeroJogador;
+	char nomeJogador[80];
 	struct jogadores *direita;
 	struct jogadores *esquerda;
 };
 
 typedef struct jogadores Time;
 
-Time *criar_time(int numero_jogador);
+Time *criarTime(int numeroJogador);
 
-void adicionar_jogadores(Time *jogadores, int numero_jogador);
+void adicionarJogadores(Time *jogadores, int numeroJogador);
 
-void mostrar_escalacao_ordem(Time *jogadores);
+void mostrarEscalacaoOrdem(Time *jogadores);
 
-void mostrar_escalacao_posOrdem(Time *jogadores);
+void mostrarEscalacaoPosOrdem(Time *jogadores);
 
 void separador();
 
-void substituir_jogador(Time *jogadores, int numero_jogador);
+void substituirJogador(Time *jogadores, int numeroJogador);
 
 int main() {
-	int numero_jogador, opcao, condicao = 0, contador = 0;
+	int numeroJogador, opcao, condicao = 0, contador = 0;
 	char escolha;
-	Time *primeiro_jogador;
+	Time *primeiroJogador;
 	
 	do{
 		separador();
@@ -55,28 +55,29 @@ int main() {
 		scanf("%d", &opcao);
 		
 		switch(opcao) {
+			
 			case 1:
 				
 				do{
 					printf("Numero da camisa: ");
-					scanf("%d", &numero_jogador);
+					scanf("%d", &numeroJogador);
 						
 					if(contador == 0) {
-						primeiro_jogador = criar_time(numero_jogador);
+						primeiroJogador = criarTime(numeroJogador);
 						contador++;
 					} else if(contador <= 10) {
-						adicionar_jogadores(primeiro_jogador, numero_jogador);
+						adicionarJogadores(primeiroJogador, numeroJogador);
 						contador++;
 					} else{
 						printf("\n[ERROR] O numero maximo de jogadores em campo e 11.\n\n");
 						printf("Deseja substituir qual jogador?\n");
 						printf("Numero da camisa: ");
-						scanf("%d", &numero_jogador);
-						substituir_jogador(primeiro_jogador, numero_jogador);
+						scanf("%d", &numeroJogador);
+						substituirJogador(primeiroJogador, numeroJogador);
 						printf("Deseja substituir por qual jogador?");
 						printf("Numero da camisa: ");
-						scanf("%d", &numero_jogador);
-						adicionar_jogadores(primeiro_jogador, numero_jogador);
+						scanf("%d", &numeroJogador);
+						adicionarJogadores(primeiroJogador, numeroJogador);
 						printf("\nSubstituicao feita com sucesso :)\n");
 						contador--;
 					}
@@ -100,30 +101,32 @@ int main() {
 					scanf("%d", &escolha);
 					
 					switch(escolha) {
+						
 						case 1:
 							
-							if(primeiro_jogador == NULL) {
+							if(primeiroJogador == NULL) {
 								printf("[ERROR] Escalacao inexistente :(\n");
 							} else {
 								printf("\n");
 								separador();
 								printf("\tTime Titular\n");
 								separador();
-								mostrar_escalacao_ordem(primeiro_jogador);
+								mostrarEscalacaoOrdem(primeiroJogador);
 								printf("\n");
 							}
 							
 							break;
+							
 						case 2:
 							
-							if(primeiro_jogador == NULL) {
+							if(primeiroJogador == NULL) {
 								printf("[ERROR] Escalacao inexistente :(\n");
 							} else{
 								printf("\n");
 								separador();
 								printf("\tTime Titular\n");
 								separador();
-								mostrar_escalacao_posOrdem(primeiro_jogador);
+								mostrarEscalacaoPosOrdem(primeiroJogador);
 								printf("\n");
 							}
 							
@@ -132,19 +135,23 @@ int main() {
 						case 3:
 							
 							condicao = 1;
+							
 							break;
 							
 						default:
 							printf("[ERROR] Opcao invalida x(\n");
 					}
-				}while(condicao != 1);
+					
+				} while(condicao != 1);
 				
 				break;
 				
 			case 3:
+				
 				printf("Camisa do jogador: ");
-				scanf("%d", &numero_jogador);
-				substituir_jogador(primeiro_jogador, numero_jogador);
+				scanf("%d", &numeroJogador);
+				substituirJogador(primeiroJogador, numeroJogador);
+				
 				break;
 				
 			case 4:
@@ -157,143 +164,144 @@ int main() {
 		
 	} while(condicao != 2);
 	
+	printf("Obrigado por usar nossos servicos :)\n");
 	
 	return 0;
 }
 
-Time *criar_time(int numero_jogador) {
+Time *criarTime(int numeroJogador) {
 	Time *jogadores = malloc(sizeof(Time));
 	
 	printf("Nome: ");
-	scanf("%s", jogadores->nome_jogador);
-	jogadores->numero_jogador = numero_jogador;
+	scanf("%s", jogadores->nomeJogador);
+	jogadores->numeroJogador = numeroJogador;
 	jogadores->direita = NULL;
 	jogadores->esquerda = NULL;
 	
 	return jogadores;
 }
 
-void adicionar_jogadores(Time *jogadores, int numero_jogador) {
+void adicionarJogadores(Time *jogadores, int numeroJogador) {
 	
-	if(numero_jogador > jogadores->numero_jogador) {
+	if(numeroJogador > jogadores->numeroJogador) {
 		
 		if(jogadores->direita == NULL) {
-			jogadores->direita = criar_time(numero_jogador);
+			jogadores->direita = criarTime(numeroJogador);
 		} else {
-			adicionar_jogadores(jogadores->direita, numero_jogador);
+			adicionarJogadores(jogadores->direita, numeroJogador);
 		}
 		
 	} else {
 		
 		if(jogadores->esquerda == NULL) {
-			jogadores->esquerda = criar_time(numero_jogador);
+			jogadores->esquerda = criarTime(numeroJogador);
 		} else{
-			adicionar_jogadores(jogadores->esquerda, numero_jogador);
+			adicionarJogadores(jogadores->esquerda, numeroJogador);
 		}
 		
 	}
 	
 }
 
-void mostrar_escalacao_ordem(Time *jogadores) {
+void mostrarEscalacaoOrdem(Time *jogadores) {
 	
 	if(jogadores == NULL) {
 		return;
 	}
 	
-	mostrar_escalacao_ordem(jogadores->esquerda);
-	printf("%s - %d\n", jogadores->nome_jogador, jogadores->numero_jogador);
-	mostrar_escalacao_ordem(jogadores->direita);
+	mostrarEscalacaoOrdem(jogadores->esquerda);
+	printf("%s - %d\n", jogadores->nomeJogador, jogadores->numeroJogador);
+	mostrarEscalacaoOrdem(jogadores->direita);
 }
 
-void mostrar_escalacao_posOrdem(Time *jogadores) {
+void mostrarEscalacaoPosOrdem(Time *jogadores) {
 	
 	if(jogadores == NULL) {
 		return;
 	}
 	
-	mostrar_escalacao_posOrdem(jogadores->esquerda);
-	mostrar_escalacao_posOrdem(jogadores->direita);
-	printf("%s - %d\n", jogadores->nome_jogador, jogadores->numero_jogador);
+	mostrarEscalacaoPosOrdem(jogadores->esquerda);
+	mostrarEscalacaoPosOrdem(jogadores->direita);
+	printf("%s - %d\n", jogadores->nomeJogador, jogadores->numeroJogador);
 }
 
 void separador() {
 	printf("---------------------------------\n");
 }
 
-void substituir_jogador(Time *jogadores, int numero_jogador) {
-	Time *escalacao_anterior = jogadores;
-	Time *nova_escalacao;
+void substituirJogador(Time *jogadores, int numeroJogador) {
+	Time *escalacaoAnterior = jogadores;
+	Time *novaEscalacao;
 	
 	do{
-		nova_escalacao = escalacao_anterior;
+		novaEscalacao = escalacaoAnterior;
 		
-		if(numero_jogador > escalacao_anterior->numero_jogador) {
-			escalacao_anterior = escalacao_anterior->direita;
-		} else if(numero_jogador < escalacao_anterior->numero_jogador) {
-			escalacao_anterior = escalacao_anterior->esquerda;
+		if(numeroJogador > escalacaoAnterior->numeroJogador) {
+			escalacaoAnterior = escalacaoAnterior->direita;
+		} else if(numeroJogador < escalacaoAnterior->numeroJogador) {
+			escalacaoAnterior = escalacaoAnterior->esquerda;
 		}
 		
-	} while(escalacao_anterior != NULL && escalacao_anterior->numero_jogador != numero_jogador);
+	} while(escalacaoAnterior != NULL && escalacaoAnterior->numeroJogador != numeroJogador);
 	
-	if(escalacao_anterior != NULL) {
+	if(escalacaoAnterior != NULL) {
 		
-		printf("\nJogador de camisa %d sera substituido\n", numero_jogador);
+		printf("\nJogador de camisa %d sera substituido\n", numeroJogador);
 		
-		if(escalacao_anterior->esquerda == NULL && escalacao_anterior->direita == NULL) {
+		if(escalacaoAnterior->esquerda == NULL && escalacaoAnterior->direita == NULL) {
 			
-			if(nova_escalacao->esquerda == escalacao_anterior) {
-				nova_escalacao->esquerda = NULL;
+			if(novaEscalacao->esquerda == escalacaoAnterior) {
+				novaEscalacao->esquerda = NULL;
 			}
-			if(nova_escalacao->direita == escalacao_anterior) {
-				nova_escalacao->direita = NULL;
+			if(novaEscalacao->direita == escalacaoAnterior) {
+				novaEscalacao->direita = NULL;
 			}
 			
 		}
 		
-		if(escalacao_anterior->esquerda != NULL && escalacao_anterior->direita == NULL) {
+		if(escalacaoAnterior->esquerda != NULL && escalacaoAnterior->direita == NULL) {
 			
-			if(nova_escalacao->esquerda == escalacao_anterior) {
-				nova_escalacao->esquerda = escalacao_anterior->esquerda;
+			if(novaEscalacao->esquerda == escalacaoAnterior) {
+				novaEscalacao->esquerda = escalacaoAnterior->esquerda;
 			}
-			if(nova_escalacao->direita == escalacao_anterior) {
-				nova_escalacao->direita = escalacao_anterior->esquerda;
-			}
-			
-		}
-		
-		if(escalacao_anterior->esquerda == NULL && escalacao_anterior->direita != NULL) {
-			
-			if(nova_escalacao->esquerda == escalacao_anterior) {
-				nova_escalacao->esquerda = nova_escalacao->direita;
-			}
-			if(nova_escalacao->direita == escalacao_anterior) {
-				nova_escalacao->direita = nova_escalacao->direita;
+			if(novaEscalacao->direita == escalacaoAnterior) {
+				novaEscalacao->direita = escalacaoAnterior->esquerda;
 			}
 			
 		}
 		
-		if(escalacao_anterior->esquerda != NULL && escalacao_anterior->direita != NULL) {
+		if(escalacaoAnterior->esquerda == NULL && escalacaoAnterior->direita != NULL) {
 			
-			if(escalacao_anterior->esquerda->direita == NULL) {
-				escalacao_anterior->numero_jogador = escalacao_anterior->esquerda->numero_jogador;
-				escalacao_anterior->esquerda = NULL;
+			if(novaEscalacao->esquerda == escalacaoAnterior) {
+				novaEscalacao->esquerda = novaEscalacao->direita;
+			}
+			if(novaEscalacao->direita == escalacaoAnterior) {
+				novaEscalacao->direita = novaEscalacao->direita;
+			}
+			
+		}
+		
+		if(escalacaoAnterior->esquerda != NULL && escalacaoAnterior->direita != NULL) {
+			
+			if(escalacaoAnterior->esquerda->direita == NULL) {
+				escalacaoAnterior->numeroJogador = escalacaoAnterior->esquerda->numeroJogador;
+				escalacaoAnterior->esquerda = NULL;
 			} else {
-				Time *reservas = escalacao_anterior->esquerda;
-				Time *titulares = reservas;
+				Time *jogadoresReservas = escalacaoAnterior->esquerda;
+				Time *jogadoresTitulares = jogadoresReservas;
 				
-				while(reservas->direita != NULL) {
-					titulares = reservas;
-					reservas = reservas->direita;
+				while(jogadoresReservas->direita != NULL) {
+					jogadoresTitulares = jogadoresReservas;
+					jogadoresReservas = jogadoresReservas->direita;
 				}
 				
-				titulares->direita = NULL;
-				escalacao_anterior->numero_jogador = reservas->numero_jogador;
+				jogadoresTitulares->direita = NULL;
+				escalacaoAnterior->numeroJogador = jogadoresReservas->numeroJogador;
 			}
 			
 		}
 		
 	} else {
-		printf("[ERROR] Jogador de camisa %d nao esta na partida\n", numero_jogador);
+		printf("[ERROR] Jogador de camisa %d nao esta na partida\n", numeroJogador);
 	}
 }

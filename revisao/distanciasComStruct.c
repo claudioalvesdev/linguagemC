@@ -10,18 +10,14 @@ struct ordenacao {
 
 typedef struct ordenacao Valores;
 
-void separador() {
-	printf("----------------------------\n");
-}
+void separador();
 
-float distanciaEntrePontos(Valores ordenacoes) {
-	return sqrt(pow((ordenacoes.x2 - ordenacoes.x1), 2) + pow((ordenacoes.y2 - ordenacoes.y1), 2));
-}
+float distanciaEntrePontos(Valores ordenacoes);
 
 int main() {
 	Valores ordenacoes;
 	char condicao;
-	int distancia;
+	float distancia;
 	
 	separador();
 	printf("DISTANCIA ENTRE NUMEROS\n");
@@ -29,13 +25,13 @@ int main() {
 	
 	do {
 		printf("x1: ");
-		scanf("%f", &(ordenacoes.x1));
+		scanf("%f", &ordenacoes.x1);
 		printf("y1: ");
-		scanf("%f", &(ordenacoes.y1));
+		scanf("%f", &ordenacoes.y1);
 		printf("x2: ");
-		scanf("%f", &(ordenacoes.x2));
+		scanf("%f", &ordenacoes.x2);
 		printf("y2: ");
-		scanf("%f", &(ordenacoes.y2));
+		scanf("%f", &ordenacoes.y2);
 		
 		distancia = distanciaEntrePontos(ordenacoes);
 		separador();
@@ -50,4 +46,12 @@ int main() {
 	printf("Obrigado por usar nosso servico :)\n");
 	
 	return 0;
+}
+
+void separador() {
+	printf("----------------------------\n");
+}
+
+float distanciaEntrePontos(Valores ordenacoes) {
+	return sqrt(pow((ordenacoes.x2 - ordenacoes.x1), 2) + pow((ordenacoes.y2 - ordenacoes.y1), 2));
 }

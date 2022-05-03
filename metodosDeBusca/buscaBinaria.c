@@ -3,7 +3,7 @@
 
 void ordenarVetor(int tamanho, int *vetor);
 
-int buscaBinaria(int tamanho, int *vetor, int valorDesejado);
+int buscaBinaria(int *vetor, int valorDesejado, int posicaoInicio, int posicaoFinal);
 
 int main() {
 	int vetor[100], valorDesejado, indiceDesejado;
@@ -27,7 +27,7 @@ int main() {
 	printf("\nDesejar procurar qual numero? ");
 	scanf("%d", &valorDesejado);
 	
-	indiceDesejado = buscaBinaria(100, vetor, valorDesejado);
+	indiceDesejado = buscaBinaria(vetor, valorDesejado, 0, 99);
 	
 	if(indiceDesejado < 0) {
 		printf("[ERRO] Numero nao encontrado x(\n");
@@ -55,6 +55,21 @@ void ordenarVetor(int tamanho, int *vetor) {
 	}
 }
 
-int buscaBinaria(int tamanho, int *vetor, int valorDesejado) {
+int buscaBinaria(int *vetor, int valorDesejado, int posicaoInicio, int posicaoFinal) {
+	int posicaoMeio = (posicaoInicio + posicaoFinal) / 2;
+	
+	if(posicaoInicio > posicaoFinal) {
+		return - 1;
+	}
+	
+	if(valorDesejado == vetor[posicaoMeio]) {
+		return posicaoMeio;
+	}
+	
+	if(valorDesejado < vetor[posicaoMeio]) {
+		return buscaBinaria(vetor, valorDesejado, posicaoInicio, posicaoMeio - 1);
+	} else {
+		return buscaBinaria(vetor, valorDesejado, posicaoMeio + 1, posicaoFinal);
+	} 
 	
 }

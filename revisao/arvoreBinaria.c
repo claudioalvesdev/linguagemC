@@ -24,23 +24,36 @@ No *removerNo(No *elemento, int valor) {
         elemento->direita = removerNo(elemento->direita, valor);
     } else {
         
-    // NÓ FOLHA
-    if(elemento->esquerda == NULL && elemento->direita == NULL) {
-        free(elemento);
-        
-        return NULL;
-    } else if(elemento->esquerda == NULL) {
-        No *aux = elemento;
-        elemento = elemento->direita;
-        free(t);
-        
-        return elemento;
-    } else if(elemento->direita == NULL) {
-        No *aux = elemento;
-        elemento = elemento->esquerda;
-        free(aux);
-        
-        return elemento;
+        // NÓ FOLHA
+        if(elemento->esquerda == NULL && elemento->direita == NULL) {
+            free(elemento);
+            
+            return NULL;
+        } else if(elemento->esquerda == NULL) {
+            No *aux = elemento;
+            elemento = elemento->direita;
+            free(aux);
+            
+            return elemento;
+        } else if(elemento->direita == NULL) {
+            No *aux = elemento;
+            elemento = elemento->esquerda;
+            free(aux);
+            
+            return elemento;
+        } else {
+            No *aux = elemento->esquerda;
+            
+            while(aux->esquerda != NULL) {
+                aux = aux->esquerda;
+            }
+            
+            elemento->valor = aux->valor;
+            aux->valor = valor;
+            elemento->direita = removerNo(elemento->direita, valor);
+            
+            return elemento;
+        }
     }
 }
 
@@ -50,6 +63,9 @@ int main() {
 	elemento = inserirElemento(elemento, 5);
 	elemento = inserirElemento(elemento, 2);
 	
+	mostrarElemento(elemento);
+	elemento = removerNo(elemento, 2);
+	printf("\n");
 	mostrarElemento(elemento);
 	return 0;
 }

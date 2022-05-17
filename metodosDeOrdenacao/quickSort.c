@@ -4,23 +4,45 @@
 void quickSort(int tamanho, int *vetor);
 
 int main() {
-	int vetor[100];
+	int tamanho = 40000;
+	int vetor[tamanho];
 	
-	printf("\n\t\t\t\t\tGERANDO UM VETOR COM TAMANHO 100\n\n");
+	/* 1º TESTE COM VETOR GERARDO RANDOMICAMENTE */
+	/*
+	printf("\n\t\t\t\t\tGERANDO UM VETOR RANDOMICAMENTE\n\n");
 	
-	for(int i = 0; i < 100; i++) {
-		vetor[i] = rand() % 150;
+	for(int i = 0; i < tamanho; i++) {
+		vetor[i] = rand();
 		
-		printf("[%3d] ", vetor[i]);
+		printf("[%d] ", vetor[i]);
 	}
 	
-	quickSort(100, vetor);
+	quickSort(tamanho, vetor);
 	
 	printf("\n\t\t\t\t\tORDENANDO O VETOR COM QUICK SORT\n\n");
 	
-	for(int i = 0; i < 100; i++) {
-		printf("[%3d] ", vetor[i]);
+	for(int i = 0; i < tamanho; i++) {
+		printf("[%d] ", vetor[i]);
 	}
+	*/
+	
+	
+	printf("\n\t\t\t\t\tGERANDO UM VETOR CRESCENTEMENTE\n\n");
+	
+	for(int i = 0; i < tamanho; i++) {
+		vetor[i] = i;
+		
+		printf("[%d] ", vetor[i]);
+	}
+	
+	quickSort(tamanho, vetor);
+	
+	printf("\n\t\t\t\t\tORDENANDO O VETOR COM QUICK SORT\n\n");
+	
+	for(int i = 0; i < tamanho; i++) {
+		printf("[%d] ", vetor[i]);
+	}
+	
 	
 	printf("\n\nOBRIGADO POR USAR NOSSOS SERVICOS :)\n");
 	
@@ -51,7 +73,7 @@ void quickSort(int tamanho, int *vetor) {
 				vetor[ultimosIndices] = aux;
 				
 				primeirosIndices++;
-				ultimosIndices++;
+				ultimosIndices--;
 			}
 			
 		} while(primeirosIndices <= ultimosIndices);
@@ -60,6 +82,6 @@ void quickSort(int tamanho, int *vetor) {
 		vetor[ultimosIndices] = pivo;
 		
 		quickSort(ultimosIndices, vetor);
-		quickSort(tamanho - primeirosIndices, &vetor[primeirosIndices]);
+		quickSort((tamanho - primeirosIndices), &vetor[primeirosIndices]);
 	}
 }

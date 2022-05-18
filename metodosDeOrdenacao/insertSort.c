@@ -7,7 +7,7 @@ int main() {
 	int tamanho = 100000;
 	int vetor[tamanho];
 	
-	/* 1º TESTE COM VETOR GERARDO RANDOMICAMENTE */
+	/* 1º TESTE COM VETOR GERADO RANDOMICAMENTE */
 	/*
 	printf("\n\t\t\t\t\tGERANDO UM VETOR RANDOMICAMENTE\n\n");
 	
@@ -26,12 +26,31 @@ int main() {
 	}
 	*/
 	
-	/* 2º TESTE COM VETOR GERARDO CRESCENTEMENTE */
+	/* 2º TESTE COM VETOR GERADO CRESCENTEMENTE */
 	/*
 	printf("\n\t\t\t\t\tGERANDO UM VETOR CRESCENTEMENTE\n\n");
 	
 	for(int i = 0; i < tamanho; i++) {
 		vetor[i] = i;
+		
+		printf("[%d] ", vetor[i]);
+	}
+	
+	insertSort(tamanho, vetor);
+	
+	printf("\n\t\t\t\t\tORDENANDO O VETOR COM INSERT SORT\n\n");
+	
+	for(int i = 0; i < tamanho; i++) {
+		printf("[%d] ", vetor[i]);
+	}
+	*/
+	
+	/* 3ª TESTE COM VETOR GERADO DECRESCENTEMENTE */
+	/*
+	printf("\n\t\t\t\t\tCRIANDO VETOR DECRESCEMENTE\n\n");
+	
+	for(int i = tamanho; i >= 0; i--) {
+		vetor[i] = tamanho - i;
 		
 		printf("[%d] ", vetor[i]);
 	}

@@ -40,14 +40,32 @@ int quantidade_no(Arv *raiz) {
   }
 }
 
+int no_nao_folha(Arv *raiz) {
+    if(raiz != NULL) {
+        if (raiz->esq != NULL || raiz->dir != NULL) {
+            return 1 + no_nao_folha(raiz->esq) + no_nao_folha(raiz->dir);
+        }
+    }
+}
+
 int main() {
     Arv *raiz = NULL;
-    int qtd_no;
-    raiz = inserir_no(raiz, 50);
-    raiz = inserir_no(raiz, 100);
+    int qtd_no, qtd_no_nao_folha;
+    raiz = inserir_no(raiz, 20);
+    raiz = inserir_no(raiz, 15);
+    raiz = inserir_no(raiz, 11);
+    raiz = inserir_no(raiz, 10);
+    raiz = inserir_no(raiz, 12);
+    raiz = inserir_no(raiz, 18);
+    raiz = inserir_no(raiz, 22);
+    raiz = inserir_no(raiz, 21);
+    raiz = inserir_no(raiz, 30);
     raiz = inserir_no(raiz, 25);
+    raiz = inserir_no(raiz, 40);
+    raiz = inserir_no(raiz, 23);
     qtd_no = quantidade_no(raiz);
+    no = no_nao_folha(raiz);
     mostrar_arvore(raiz);
-    printf("%d", qtd_no);
+    printf("%d %d", qtd_no, qtd_no_nao_folha);
     return 0;
 }

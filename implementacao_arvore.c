@@ -32,6 +32,7 @@ void mostrar_arvore(Arv *raiz) {
   }
 }
 
+
 int quantidade_no(Arv *raiz) {
   if(raiz != NULL) {
     return 1 + quantidade_no(raiz->esq) + quantidade_no(raiz->dir);
@@ -48,9 +49,35 @@ int no_nao_folha(Arv *raiz) {
     }
 }
 
+int quantidade_folhas(Arv *raiz) {
+    if(raiz == NULL) {
+        return 0;
+    }
+    if(raiz->esq == NULL && raiz->dir ==  NULL) {
+        return 1;
+    }
+    
+    return quantidade_folhas(raiz->esq) + quantidade_folhas(raiz->dir);
+    
+}
+
+int altura_arvore(Arv *raiz) {
+	if (raiz != NULL) {
+		int lado_esquerdo = altura_arvore(raiz->esq);
+		int lado_direito = altura_arvore(raiz->dir);
+		
+		if (lado_esquerdo > lado_direito) {
+		    return 1 + lado_esquerdo;  
+		} else {
+		    return 1 + lado_direito;    
+		}
+	}
+	return 0;
+}
+
 int main() {
     Arv *raiz = NULL;
-    int qtd_no, qtd_no_nao_folha;
+    int qtd_no, qtd_no_nao_folha, qtd_folha, altura;
     raiz = inserir_no(raiz, 20);
     raiz = inserir_no(raiz, 15);
     raiz = inserir_no(raiz, 11);
@@ -64,8 +91,10 @@ int main() {
     raiz = inserir_no(raiz, 40);
     raiz = inserir_no(raiz, 23);
     qtd_no = quantidade_no(raiz);
-    no = no_nao_folha(raiz);
+    qtd_no_nao_folha = no_nao_folha(raiz);
+    qtd_folha = quantidade_folhas(raiz);
+    altura = altura_arvore(raiz);
     mostrar_arvore(raiz);
-    printf("%d %d", qtd_no, qtd_no_nao_folha);
+    printf("%d %d %d %d", qtd_no, qtd_no_nao_folha, qtd_folha, altura);
     return 0;
 }

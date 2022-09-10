@@ -100,6 +100,26 @@ void maior_numero(Arv *raiz) {
     }
 }
 
+int valor_maximo(Arv *raiz) {
+    Arv *aux = raiz;
+    if(raiz != NULL) {
+        while(aux->dir != NULL) {
+            aux = aux->dir;
+        }
+        return aux->valor;
+    }
+}
+
+int menor_valor(Arv *raiz) {
+    Arv *aux = raiz;
+    if(raiz != NULL) {
+        while(aux->esq != NULL) {
+            aux = aux->esq;
+        }
+        return aux->valor;
+    }
+}
+
 int main() {
     Arv *raiz = NULL;
     int qtd_no, qtd_no_nao_folha, qtd_folha, altura;

@@ -75,6 +75,31 @@ int altura_arvore(Arv *raiz) {
 	return 0;
 }
 
+
+void buscar_impar(Arv *raiz, int numero) {
+    if(raiz != NULL) {
+        if(raiz->valor % 2 != 0) {
+            if(raiz->valor == numero) {
+                printf("O valor %d foi encontrada\n", numero);
+            }
+        }
+        buscar_impar(raiz->dir, numero);
+        buscar_impar(raiz->esq, numero);
+    } 
+}
+
+int maior_valor = 0;
+void maior_numero(Arv *raiz) {
+    if(raiz != NULL) {
+        if(raiz->valor > maior_valor) {
+            maior_valor = raiz->valor;
+        }
+        
+        maior_numero(raiz->esq);
+        maior_numero(raiz->dir);
+    }
+}
+
 int main() {
     Arv *raiz = NULL;
     int qtd_no, qtd_no_nao_folha, qtd_folha, altura;
